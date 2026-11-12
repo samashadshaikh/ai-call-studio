@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101412" />
+    <title>Call Studio — Local AI Voice Demo</title>
+    <meta name="description" content="A zero-cost local AI voice calling demonstration." />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div><strong>Call Studio</strong><small>Local voice lab</small></div>
+        </div>
+
+        <nav aria-label="Main navigation">
+          <button class="nav-item active" data-view="campaign">
+            <span class="nav-icon">⌁</span><span>Campaign</span>
+          </button>
+          <button class="nav-item" data-view="knowledge">
+            <span class="nav-icon">◫</span><span>Knowledge</span>
+          </button>
+          <button class="nav-item" data-view="settings">
+            <span class="nav-icon">◉</span><span>Agent setup</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-foot">
+          <div class="local-badge"><span></span> Running locally</div>
+          <p>No API billing. Lead data stays in this browser.</p>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">OUTBOUND DEMO</p>
+            <h1 id="page-title">Lead qualification</h1>
+          </div>
+          <div class="top-actions">
+            <div class="system-pill" id="system-pill"><span></span><b>Scripted mode</b></div>
+            <button class="button ghost" id="import-button">Import CSV</button>
+            <input id="csv-input" type="file" accept=".csv,text/csv" hidden />
+            <button class="button primary" id="new-demo-button">Start demo call</button>
+          </div>
+        </header>
+
+        <section class="view active" id="campaign-view">
+          <div class="metrics-grid">
+            <article class="metric-card dark">
+              <span class="metric-label">Demo readiness</span>
+              <strong>Ready</strong>
+              <p>Microphone, local scripts and browser voice</p>
+              <div class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Leads</span>
+              <strong id="lead-count">3</strong>
+              <p>Available for simulation</p>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Qualified</span>
+              <strong id="qualified-count">0</strong>
+              <p>Completed demo outcomes</p>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Estimated live cost</span>
+              <strong>₹3.90</strong>
+              <p>Per minute when telephony is connected</p>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel leads-panel">
+              <div class="panel-head">
+                <div><p class="eyebrow">LEAD QUEUE</p><h2>People to call</h2></div>
+                <span class="quiet" id="lead-source">Sample data</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Lead</th><th>Interest</th><th>Language</th><th>Status</th><th></th></tr></thead>
+                  <tbody id="leads-body"></tbody>
+                </table>
+              </div>
+            </article>
+
+            <aside class="panel brief-panel">
+              <div class="panel-head"><div><p class="eyebrow">AGENT BRIEF</p><h2>What the agent will do</h2></div></div>
+              <ol class="brief-list">
+                <li><span>01</span><div><b>Open transparently</b><p>Introduces itself as an automated assistant.</p></div></li>
+                <li><span>02</span><div><b>Qualify naturally</b><p>Need, size, budget, timeline and location.</p></div></li>
+                <li><span>03</span><div><b>Answer accurately</b><p>Uses only the approved knowledge below.</p></div></li>
+                <li><span>04</span><div><b>Close with an action</b><p>Books a callback or records the next step.</p></div></li>
+              </ol>
+              <button class="text-button" data-view-jump="knowledge">Review approved answers →</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="knowledge-view">
+          <div class="editor-layout">
+            <article class="panel editor-card">
+              <div class="panel-head"><div><p class="eyebrow">APPROVED KNOWLEDGE</p><h2>Questions the agent can answer</h2></div><span class="save-state" id="knowledge-state">Saved locally</span></div>
+              <p class="helper">Use one question and answer per line, separated with a vertical bar. Changes are stored in your browser.</p>
+              <textarea id="knowledge-input" spellcheck="true"></textarea>
+              <div class="editor-actions"><button class="button primary" id="save-knowledge">Save knowledge</button><button class="button ghost" id="reset-knowledge">Reset sample</button></div>
+            </article>
+            <aside class="panel tips-card">
+              <p class="eyebrow">GOOD KNOWLEDGE</p><h2>Keep facts precise</h2>
+              <p>Use short spoken answers. Add exact policies, but avoid claims the agent cannot verify.</p>
+              <div class="tip"><span>✓</span><p><b>Good</b><br />“Delivery normally takes 4–6 weeks after design approval.”</p></div>
+              <div class="tip warn"><span>×</span><p><b>Avoid</b><br />“We always deliver faster than everyone else.”</p></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="settings-view">
+          <div class="editor-layout">
+            <article class="panel editor-card">
+              <div class="panel-head"><div><p class="eyebrow">AGENT IDENTITY</p><h2>Demo configuration</h2></div></div>
+              <div class="form-grid">
+                <label>Business name<input id="business-name" value="The PieCraft" /></label>
+                <label>Agent name<input id="agent-name" value="Maya" /></label>
+                <label>Primary language<select id="agent-language"><option value="en-IN">English (India)</option><option value="hi-IN">Hindi</option></select></label>
+                <label>Browser voice<select id="voice-select"><option>Loading voices…</option></select></label>
+                <label class="span-two">Objective<input id="agent-objective" value="Qualify interest in a custom rug and arrange a design consultation" /></label>
+                <label class="span-two toggle-row"><span><b>Use local Ollama when available</b><small>Handles questions that do not match the approved knowledge.</small></span><input id="ollama-toggle" type="checkbox" checked /></label>
+                <label>Ollama model<input id="ollama-model" value="qwen3:4b" /></label>
+              </div>
+              <div class="editor-actions"><button class="button primary" id="save-settings">Save setup</button><button class="button ghost" id="check-ollama">Check Ollama</button></div>
+            </article>
+            <aside class="panel tips-card">
+              <p class="eyebrow">ZERO-COST MODES</p><h2>Works with or without Ollama</h2>
+              <div class="mode-row"><span class="mode-dot green"></span><div><b>Scripted mode</b><p>Instant, reliable qualification and FAQs.</p></div></div>
+              <div class="mode-row"><span class="mode-dot amber"></span><div><b>Ollama mode</b><p>More flexible answers from a local language model.</p></div></div>
+              <p class="mini-note">Install Ollama separately and run <code>ollama pull qwen3:4b</code>. The demo automatically detects it.</p>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="call-layer" id="call-layer" aria-hidden="true">
+      <div class="call-window">
+        <header class="call-header">
+          <div class="call-person"><span class="avatar" id="call-avatar">DL</span><div><p class="eyebrow">DEMO CALL</p><h2 id="call-name">Demo Lead One</h2><small id="call-number">+91 00000 00001</small></div></div>
+          <div class="call-meta"><span class="live-dot"></span><b id="call-status">Connecting</b><time id="call-timer">00:00</time></div>
+          <button class="icon-button" id="close-call" aria-label="Close call">×</button>
+        </header>
+
+        <div class="call-content">
+          <section class="conversation-panel">
+            <div class="voice-stage">
+              <div class="orb" id="voice-orb"><i></i><i></i><i></i><i></i><i></i></div>
+              <p id="voice-state">Preparing the assistant…</p>
+              <div class="call-controls">
+                <button class="round-button" id="mute-button" title="Pause listening">⌁</button>
+                <button class="end-button" id="end-call">End demo</button>
+                <button class="round-button" id="type-button" title="Type a reply">⌨</button>
+              </div>
+              <form id="text-reply-form" class="text-reply hidden"><input id="text-reply" placeholder="Type what the lead says…" autocomplete="off" /><button>Send</button></form>
+            </div>
+            <div class="transcript" id="transcript" aria-live="polite"></div>
+          </section>
+
+          <aside class="call-sidebar">
+            <div><p class="eyebrow">LIVE CAPTURE</p><h3>Qualification</h3></div>
+            <dl id="live-fields">
+              <div><dt>Requirement</dt><dd data-field="requirement">Listening…</dd></div>
+              <div><dt>Budget</dt><dd data-field="budget">—</dd></div>
+              <div><dt>Timeline</dt><dd data-field="timeline">—</dd></div>
+              <div><dt>Location</dt><dd data-field="location">—</dd></div>
+              <div><dt>Next step</dt><dd data-field="nextStep">—</dd></div>
+            </dl>
+            <div class="call-note"><span>i</span><p>This is a simulation. No telephone number is being dialled.</p></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
